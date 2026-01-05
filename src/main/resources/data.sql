@@ -1,0 +1,2 @@
+-- Arquivo limpo para evitar inserção de dados fakes e erro de duplicidade.
+-- O banco será iniciado vazio.
