@@ -2,10 +2,11 @@ package com.oficina.cadastro.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Controller utilitário para gerar hashes BCrypt.
@@ -21,6 +22,16 @@ public class UtilController {
     @PostMapping("/gerar-hash")
     public String gerarHash(@RequestBody String senha) {
         return passwordEncoder.encode(senha);
+    }
+
+    @GetMapping("/version")
+    public Map<String, Object> getVersion() {
+        Map<String, Object> version = new HashMap<>();
+        version.put("version", "1.1.0-cors-fix");
+        version.put("timestamp", LocalDateTime.now().toString());
+        version.put("corsFilterRemoved", true);
+        version.put("message", "CorsFilter removed - using CorsConfig only");
+        return version;
     }
 }
 
