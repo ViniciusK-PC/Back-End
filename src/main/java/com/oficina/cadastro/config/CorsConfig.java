@@ -7,6 +7,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class CorsConfig {
@@ -15,31 +16,46 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Origens permitidas (Frontend Vercel + localhost para desenvolvimento)
-        configuration.setAllowedOriginPatterns(Arrays.asList(
+        // Origens permitidas - Frontend Vercel + localhost para desenvolvimento
+        configuration.setAllowedOrigins(Arrays.asList(
                 "https://front-end-five-sable.vercel.app",
+                "http://localhost:4200",
+                "http://localhost:4201",
+                "http://127.0.0.1:4200"));
+
+        // Também permitir padrões para preview deploys do Vercel
+        configuration.setAllowedOriginPatterns(Arrays.asList(
                 "https://*.vercel.app",
                 "http://localhost:*",
                 "http://127.0.0.1:*"));
 
-        // Permitir métodos HTTP
+        // Permitir todos os métodos HTTP
         configuration.setAllowedMethods(Arrays.asList(
                 "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
 
         // Permitir todos os headers
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Type",
+                "X-Requested-With",
+                "Accept",
+                "Origin",
+                "Access-Control-Request-Method",
+                "Access-Control-Request-Headers",
+                "Cache-Control"));
 
-        // Permitir credenciais
+        // Permitir credenciais (cookies, authorization headers)
         configuration.setAllowCredentials(true);
 
-        // Headers expostos
+        // Headers expostos na resposta
         configuration.setExposedHeaders(Arrays.asList(
                 "Authorization",
                 "Content-Type",
                 "Access-Control-Allow-Origin",
-                "Access-Control-Allow-Credentials"));
+                "Access-Control-Allow-Credentials",
+                "X-Total-Count"));
 
-        // Cache de preflight
+        // Cache de preflight (1 hora)
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
