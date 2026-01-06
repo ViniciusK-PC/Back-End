@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -85,8 +86,8 @@ public class OrdemServicoIntegrationTest {
                                 "Dell",
                                 "Inspiron 15",
                                 "ABC123456",
-                                null,
-                                null);
+                                (LocalDate) null,
+                                (String) null);
 
                 MvcResult equipamentoResult = mockMvc.perform(post("/api/equipamentos")
                                 .header("Authorization", "Bearer " + authToken)
