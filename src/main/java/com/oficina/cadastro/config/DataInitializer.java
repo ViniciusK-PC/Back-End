@@ -20,15 +20,15 @@ public class DataInitializer {
     public CommandLineRunner initData() {
         return args -> {
             if (usuarioRepository.count() == 0) {
-                Usuario admin = new Usuario();
-                admin.setNome("Administrador");
-                admin.setEmail("admin@oficina.com");
-                admin.setSenhaHash(passwordEncoder.encode("admin123"));
-                admin.setPerfil(PerfilUsuario.GERENTE);
-                admin.setAtivo(true);
+                Usuario mauricio = new Usuario();
+                mauricio.setNome("Mauricio");
+                mauricio.setEmail("mauricio@oficina.com");
+                mauricio.setSenhaHash(passwordEncoder.encode("admin123"));
+                mauricio.setPerfil(PerfilUsuario.DONO); // Perfil de Dono
+                mauricio.setAtivo(true);
 
-                usuarioRepository.save(admin);
-                System.out.println("Usuário Admin criado: admin@oficina.com / admin123");
+                usuarioRepository.save(mauricio);
+                System.out.println("Usuário Dono criado: Mauricio (mauricio@oficina.com / admin123)");
             }
         };
     }
