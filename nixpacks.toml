@@ -1,5 +1,2 @@
 [build]
 command = "./mvnw clean install -DskipTests"
-
-[start]
-command = "java -jar target/*.jar"
