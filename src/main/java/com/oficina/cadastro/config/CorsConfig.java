@@ -16,16 +16,18 @@ public class CorsConfig {
         public CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration();
 
-                // Origens permitidas - Frontend Vercel + localhost para desenvolvimento
+                // Origens permitidas - Frontend Vercel + Railway + localhost
                 configuration.setAllowedOrigins(Arrays.asList(
                                 "https://front-end-five-sable.vercel.app",
+                                "https://back-end-production-1d27.up.railway.app",
                                 "http://localhost:4200",
                                 "http://localhost:4201",
                                 "http://127.0.0.1:4200"));
 
-                // Também permitir padrões para preview deploys do Vercel
+                // Também permitir padrões para preview deploys do Vercel e subdomínios Railway
                 configuration.setAllowedOriginPatterns(Arrays.asList(
                                 "https://*.vercel.app",
+                                "https://*.railway.app",
                                 "http://localhost:*",
                                 "http://127.0.0.1:*"));
 
