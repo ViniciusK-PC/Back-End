@@ -5,15 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface EquipamentoRepository {
-
-    List<Equipamento> findAll();
-
-    Optional<Equipamento> findById(UUID id);
-
-    Equipamento save(Equipamento equipamento);
-
-    void deleteById(UUID id);
+public interface EquipamentoRepository
+        extends org.springframework.data.jpa.repository.JpaRepository<Equipamento, UUID> {
 
     List<Equipamento> findByClienteId(UUID clienteId);
 }

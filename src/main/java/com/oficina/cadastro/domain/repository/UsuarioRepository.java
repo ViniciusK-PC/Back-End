@@ -5,17 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.List;
 
-public interface UsuarioRepository {
+public interface UsuarioRepository extends org.springframework.data.jpa.repository.JpaRepository<Usuario, UUID> {
 
     Optional<Usuario> findByEmail(String email);
-
-    Optional<Usuario> findById(UUID id);
-
-    Usuario save(Usuario usuario);
-
-    List<Usuario> findAll();
-
-    void deleteById(UUID id);
-
-    long count();
 }

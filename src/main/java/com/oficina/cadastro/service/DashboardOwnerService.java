@@ -20,75 +20,74 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DashboardOwnerService {
 
-    private final OrdemServicoRepository ordemRepository;
-    private final ClienteRepository clienteRepository;
+        private final OrdemServicoRepository ordemRepository;
+        private final ClienteRepository clienteRepository;
 
-    public DashboardKPIsDTO calcularKPIs() {
-        LocalDateTime inicioMes = LocalDateTime.now()
-                .withDayOfMonth(1)
-                .withHour(0)
-                .withMinute(0)
-                .withSecond(0)
-                .withNano(0);
+        public DashboardKPIsDTO calcularKPIs() {
+                java.time.LocalDate inicioMes = java.time.LocalDate.now().withDayOfMonth(1);
 
-        Long totalClientes = clienteRepository.count();
+                Long totalClientes = clienteRepository.count();
 
-        List<StatusOrdemServico> statusEmAndamento = Arrays.asList(
-                StatusOrdemServico.RECEBIDO,
-                StatusOrdemServico.DIAGNOSTICO,
-                StatusOrdemServico.EM_REPARO,
-                StatusOrdemServico.AGUARDANDO_PECAS);
+                List<StatusOrdemServico> statusEmAndamento = Arrays.asList(
+                                StatusOrdemServico.RECEBIDO,
+                                StatusOrdemServico.DIAGNOSTICO,
+                                StatusOrdemServico.EM_REPARO,
+                                StatusOrdemServico.AGUARDANDO_PECAS);
 
-        Long ordensEmAndamento = ordemRepository.countByStatusIn(statusEmAndamento);
+                Long ordensEmAndamento = ordemRepository.countByStatusIn(statusEmAndamento);
 
-        Long ordensConcluidasMes = ordemRepository.countByStatusAndDataConclusaoAfter(
-                StatusOrdemServico.ENTREGUE,
-                inicioMes);
+                Long ordensConcluidasMes = ordemRepository.countByStatusAndDataConclusaoAfter(
+                                StatusOrdemServico.ENTREGUE,
+                                inicioMes);
 
-        Double receitaTotalMes = ordemRepository.sumValoresByDataConclusaoAfter(inicioMes);
+                java.math.BigDecimal receitaTotalMesBD = ordemRepository.sumValoresByDataConclusaoAfter(inicioMes);
+                Double receitaTotalMes = receitaTotalMesBD != null ? receitaTotalMesBD.doubleValue() : 0.0;
 
-        return DashboardKPIsDTO.builder()
-                .totalClientes(totalClientes)
-                .ordensEmAndamento(ordensEmAndamento)
-                .ordensConcluidasMes(ordensConcluidasMes)
-                .receitaTotalMes(receitaTotalMes != null ? receitaTotalMes : 0.0)
-                .build();
-    }
+                return DashboardKPIsDTO.builder()
+                                .totalClientes(totalClientes)
+                                .ordensEmAndamento(ordensEmAndamento)
+                                .ordensConcluidasMes(ordensConcluidasMes)
+                                .receitaTotalMes(receitaTotalMes)
+                                .build();
+        }
 
-    public List<StatusCountDTO> contarOrdensPorStatus() {
-        List<Object[]> results = ordemRepository.countByStatusGrouped();
+        public List<StatusCountDTO> contarOrdensPorStatus() {
+                List<Object[]> results = ordemRepository.countByStatusGrouped();
 
-        return results.stream()
-                .map(row -> StatusCountDTO.builder()
-                        .status(((StatusOrdemServico) row[0]).name())
-                        .count((Long) row[1])
-                        .build())
-                .collect(Collectors.toList());
-    }
+                return results.stream()
+                                .map(row -> StatusCountDTO.builder()
+                                                .status(((StatusOrdemServico) row[0]).name())
+                                                .count((Long) row[1])
+                                                .build())
+                                .collect(Collectors.toList());
+        }
 
-    public List<ReceitaMensalDTO> calcularReceitaMensal(int ano) {
-        List<Object[]> results = ordemRepository.getReceitaMensalByAno(ano);
+        public List<ReceitaMensalDTO> calcularReceitaMensal(int ano) {
+                List<Object[]> results = ordemRepository.getReceitaMensalByAno(ano);
 
-        return results.stream()
-                .map(row -> ReceitaMensalDTO.builder()
-                        .mes((Integer) row[0])
-                        .ano((Integer) row[1])
-                        .receita((Double) row[2])
-                        .build())
-                .collect(Collectors.toList());
-    }
+                return results.stream()
+                                .map(row -> ReceitaMensalDTO.builder()
+                                                .mes((Integer) row[0])
+                                                .ano(ano)
+                                                .receita(row[1] != null ? ((java.math.BigDecimal) row[1]).doubleValue()
+                                                                : 0.0)
+                                                .build())
+                                .collect(Collectors.toList());
+        }
 
-    public List<TopClienteDTO> getTopClientes(int limit) {
-        List<Object[]> results = ordemRepository.getTopClientes();
+        public List<TopClienteDTO> getTopClientes(int limit) {
+                List<Object[]> results = ordemRepository.getTopClientes();
 
-        return results.stream()
-                .limit(limit)
-                .map(row -> TopClienteDTO.builder()
-                        .id((UUID) row[0])
-                        .nome((String) row[1])
-                        .totalOrdens((Long) row[2])
-                        .valorTotal((Double) row[3])
-                        .build())
-                .collect(Collectors.toList());
-    }
+                return results.stream()
+                                .limit(limit)
+                                .map(row -> TopClienteDTO.builder()
+                                                .id((UUID) row[0])
+                                                .nome((String) row[1])
+                                                .totalOrdens((Long) row[2])
+                                                .valorTotal(row[3] != null
+                                                                ? ((java.math.BigDecimal) row[3]).doubleValue()
+                                                                : 0.0)
+                                                .build())
+                                .collect(Collectors.toList());
+        }
 }

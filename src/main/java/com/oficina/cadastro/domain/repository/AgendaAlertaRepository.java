@@ -7,15 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface AgendaAlertaRepository {
-
-    List<AgendaAlerta> findAll();
-
-    Optional<AgendaAlerta> findById(UUID id);
-
-    AgendaAlerta save(AgendaAlerta agendaAlerta);
-
-    void deleteById(UUID id);
+public interface AgendaAlertaRepository
+        extends org.springframework.data.jpa.repository.JpaRepository<AgendaAlerta, UUID> {
 
     List<AgendaAlerta> findByStatusAndDataAgendadaBetween(StatusAlerta status, OffsetDateTime starts,
             OffsetDateTime ends);

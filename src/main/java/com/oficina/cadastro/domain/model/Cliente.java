@@ -1,5 +1,12 @@
 package com.oficina.cadastro.domain.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -8,6 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
+@Table(name = "clientes")
 @Getter
 @Setter
 @Builder
@@ -15,7 +24,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Cliente {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private String nome;
     private String documento;
     private String email;
@@ -23,7 +35,23 @@ public class Cliente {
     private String whatsapp;
     private String endereco;
     private String observacoes;
+
+    @Builder.Default
     private boolean ativo = true;
+
     private OffsetDateTime criadoEm;
     private OffsetDateTime atualizadoEm;
+
+    @PrePersist
+    public void prePersist() {
+        if (criadoEm == null) {
+            criadoEm = OffsetDateTime.now();
+        }
+        atualizadoEm = OffsetDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        atualizadoEm = OffsetDateTime.now();
+    }
 }
