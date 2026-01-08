@@ -11,13 +11,11 @@ import com.oficina.cadastro.domain.repository.OrdemServicoRepository;
 import com.oficina.cadastro.domain.repository.UsuarioRepository;
 import com.oficina.cadastro.web.dto.OrdemServicoRequest;
 import com.oficina.cadastro.web.dto.OrdemServicoResponse;
-import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +26,6 @@ public class OrdemServicoService {
     private final EquipamentoRepository equipamentoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    @Transactional(readOnly = true)
     public List<OrdemServicoResponse> listar(StatusOrdemServico status, UUID clienteId) {
         List<OrdemServico> ordens;
         if (status != null) {
@@ -41,12 +38,10 @@ public class OrdemServicoService {
         return ordens.stream().map(this::toResponse).collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
     public OrdemServicoResponse buscar(UUID id) {
         return toResponse(findOrThrow(id));
     }
 
-    @Transactional
     public OrdemServicoResponse criar(OrdemServicoRequest request) {
         OrdemServico ordem = new OrdemServico();
         applyRequest(request, ordem);
@@ -54,36 +49,34 @@ public class OrdemServicoService {
         return toResponse(ordemServicoRepository.save(ordem));
     }
 
-    @Transactional
     public OrdemServicoResponse atualizar(UUID id, OrdemServicoRequest request) {
         OrdemServico ordem = findOrThrow(id);
         applyRequest(request, ordem);
         ordem.recalcTotal();
-        return toResponse(ordem);
+        return toResponse(ordemServicoRepository.save(ordem));
     }
 
-    @Transactional
     public void deletar(UUID id) {
         OrdemServico ordem = findOrThrow(id);
-        ordemServicoRepository.delete(ordem);
+        ordemServicoRepository.deleteById(ordem.getId());
     }
 
     private OrdemServico findOrThrow(UUID id) {
         return ordemServicoRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Ordem de serviço não encontrada"));
+                .orElseThrow(() -> new RuntimeException("Ordem de serviço não encontrada"));
     }
 
     private Cliente findCliente(UUID id) {
         return clienteRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
     }
 
     private Equipamento findEquipamento(UUID id) {
         return equipamentoRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Equipamento não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Equipamento não encontrado"));
     }
 
     private Usuario findUsuario(UUID id) {
@@ -92,7 +85,7 @@ public class OrdemServicoService {
         }
         return usuarioRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
     private void applyRequest(OrdemServicoRequest request, OrdemServico ordem) {
@@ -133,4 +126,3 @@ public class OrdemServicoService {
                 ordem.getAtualizadoEm());
     }
 }
-

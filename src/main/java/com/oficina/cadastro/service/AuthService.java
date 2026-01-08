@@ -5,7 +5,6 @@ import com.oficina.cadastro.domain.repository.UsuarioRepository;
 import com.oficina.cadastro.security.JwtTokenProvider;
 import com.oficina.cadastro.web.dto.LoginRequest;
 import com.oficina.cadastro.web.dto.LoginResponse;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +24,6 @@ public class AuthService {
         private final JwtTokenProvider tokenProvider;
         private final AuthenticationManager authenticationManager;
 
-        @Transactional(readOnly = true)
         public LoginResponse login(LoginRequest request) {
                 log.info("Tentativa de login para o email: {}", request.getEmail());
                 try {
@@ -39,7 +36,7 @@ public class AuthService {
                         Usuario usuario = usuarioRepository
                                         .findByEmail(userDetails.getUsername())
                                         .orElseThrow(
-                                                        () -> new EntityNotFoundException(
+                                                        () -> new RuntimeException(
                                                                         "Usuário não encontrado: "
                                                                                         + userDetails.getUsername()));
 
