@@ -16,48 +16,34 @@ public class CorsConfig {
         public CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration();
 
-                // Origens permitidas - Frontend Vercel + Railway + localhost
-                configuration.setAllowedOrigins(Arrays.asList(
-                                "https://front-end-five-sable.vercel.app",
-                                "https://back-end-production-e2a2.up.railway.app",
-                                "http://localhost:4200",
-                                "http://localhost:4201",
-                                "http://127.0.0.1:4200"));
-
-                // Também permitir padrões para preview deploys do Vercel e subdomínios Railway
+                // Usar setAllowedOriginPatterns é mais flexível e seguro com credenciais do que
+                // setAllowedOrigins
+                // Adicionando explicitamente o frontend informado e wildcards para garantir
+                // acesso
                 configuration.setAllowedOriginPatterns(Arrays.asList(
+                                "https://front-end-five-sable.vercel.app",
                                 "https://*.vercel.app",
                                 "https://*.railway.app",
                                 "http://localhost:*",
-                                "http://127.0.0.1:*"));
+                                "http://127.0.0.1:*",
+                                "*")); // Fallback para garantir que funcione se o header vier diferente
 
                 // Permitir todos os métodos HTTP
                 configuration.setAllowedMethods(Arrays.asList(
                                 "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
 
                 // Permitir todos os headers
-                configuration.setAllowedHeaders(Arrays.asList(
-                                "Authorization",
-                                "Content-Type",
-                                "X-Requested-With",
-                                "Accept",
-                                "Origin",
-                                "Access-Control-Request-Method",
-                                "Access-Control-Request-Headers",
-                                "Cache-Control"));
+                configuration.setAllowedHeaders(Arrays.asList("*"));
 
-                // Permitir credenciais (cookies, authorization headers)
+                // Permitir credenciais
                 configuration.setAllowCredentials(true);
 
-                // Headers expostos na resposta
+                // Expor headers
                 configuration.setExposedHeaders(Arrays.asList(
                                 "Authorization",
                                 "Content-Type",
-                                "Access-Control-Allow-Origin",
-                                "Access-Control-Allow-Credentials",
                                 "X-Total-Count"));
 
-                // Cache de preflight (1 hora)
                 configuration.setMaxAge(3600L);
 
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
