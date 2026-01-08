@@ -16,39 +16,31 @@ public class CorsConfig {
         public CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration();
 
-                // Usar setAllowedOriginPatterns é mais flexível e seguro com credenciais do que
-                // setAllowedOrigins
-                // Adicionando explicitamente o frontend informado e wildcards para garantir
-                // acesso
                 configuration.setAllowedOriginPatterns(Arrays.asList(
                                 "https://front-end-five-sable.vercel.app",
                                 "https://*.vercel.app",
                                 "https://*.railway.app",
                                 "http://localhost:*",
                                 "http://127.0.0.1:*",
-                                "*")); // Fallback para garantir que funcione se o header vier diferente
+                                "*"));
 
-                // Permitir todos os métodos HTTP
-                configuration.setAllowedMethods(Arrays.asList(
-                                "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
-
-                // Permitir todos os headers
+                configuration.setAllowedMethods(
+                                Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
                 configuration.setAllowedHeaders(Arrays.asList("*"));
-
-                // Permitir credenciais
                 configuration.setAllowCredentials(true);
-
-                // Expor headers
-                configuration.setExposedHeaders(Arrays.asList(
-                                "Authorization",
-                                "Content-Type",
-                                "X-Total-Count"));
-
+                configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Total-Count"));
                 configuration.setMaxAge(3600L);
 
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
                 source.registerCorsConfiguration("/**", configuration);
-
                 return source;
+        }
+
+        @Bean
+        public org.springframework.boot.web.servlet.FilterRegistrationBean<org.springframework.web.filter.CorsFilter> corsFilter() {
+                org.springframework.boot.web.servlet.FilterRegistrationBean<org.springframework.web.filter.CorsFilter> bean = new org.springframework.boot.web.servlet.FilterRegistrationBean<>(
+                                new org.springframework.web.filter.CorsFilter(corsConfigurationSource()));
+                bean.setOrder(org.springframework.core.Ordered.HIGHEST_PRECEDENCE);
+                return bean;
         }
 }
