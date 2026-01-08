@@ -15,4 +15,21 @@ public class CadastroClientesApplication {
 		SpringApplication.run(CadastroClientesApplication.class, args);
 	}
 
+	@org.springframework.context.annotation.Bean
+	public org.springframework.boot.CommandLineRunner logUrls(org.springframework.core.env.Environment env) {
+		return args -> {
+			String port = env.getProperty("server.port", "8080");
+			String contextPath = env.getProperty("server.servlet.context-path", "");
+			String baseUrl = "http://localhost:" + port + contextPath;
+			String swaggerUrl = baseUrl + "/swagger-ui.html";
+
+			System.out.println("\n-----------------------------------------------------------");
+			System.out.println("🚀 APLICAÇÃO RODANDO CORRETAMENTE! 🚀");
+			System.out.println("");
+			System.out.println("📡 API Base URL: " + baseUrl);
+			System.out.println("📄 Swagger UI:   " + swaggerUrl);
+			System.out.println("-----------------------------------------------------------\n");
+		};
+	}
+
 }

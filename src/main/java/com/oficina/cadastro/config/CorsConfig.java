@@ -19,7 +19,7 @@ public class CorsConfig {
                 // Origens permitidas - Frontend Vercel + Railway + localhost
                 configuration.setAllowedOrigins(Arrays.asList(
                                 "https://front-end-five-sable.vercel.app",
-                                "https://back-end-production-1d27.up.railway.app",
+                                "https://back-end-production-e2a2.up.railway.app",
                                 "http://localhost:4200",
                                 "http://localhost:4201",
                                 "http://127.0.0.1:4200"));
