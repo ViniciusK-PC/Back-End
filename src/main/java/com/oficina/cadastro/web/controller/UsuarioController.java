@@ -36,6 +36,14 @@ public class UsuarioController {
         return usuarioService.listar(nome, email, perfil, ativo);
     }
 
+    @GetMapping("/role/{perfil}")
+    public List<UsuarioResponse> listarPorPerfil(@PathVariable String perfil) {
+        // Mapeia termos usados pelo frontend para o Enum correto
+        com.oficina.cadastro.domain.enums.PerfilUsuario perfilEnum = com.oficina.cadastro.domain.enums.PerfilUsuario
+                .fromString(perfil);
+        return usuarioService.listar(null, null, perfilEnum, null);
+    }
+
     @GetMapping("/{id}")
     public UsuarioResponse buscar(@PathVariable Long id) {
         return usuarioService.buscar(id);
