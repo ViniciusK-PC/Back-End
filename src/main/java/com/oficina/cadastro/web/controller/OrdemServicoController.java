@@ -6,7 +6,6 @@ import com.oficina.cadastro.web.dto.OrdemServicoRequest;
 import com.oficina.cadastro.web.dto.OrdemServicoResponse;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,12 +29,12 @@ public class OrdemServicoController {
     @GetMapping
     public List<OrdemServicoResponse> listar(
             @RequestParam(required = false) StatusOrdemServico status,
-            @RequestParam(required = false) UUID clienteId) {
+            @RequestParam(required = false) Long clienteId) {
         return ordemServicoService.listar(status, clienteId);
     }
 
     @GetMapping("/{id}")
-    public OrdemServicoResponse buscar(@PathVariable UUID id) {
+    public OrdemServicoResponse buscar(@PathVariable Long id) {
         return ordemServicoService.buscar(id);
     }
 
@@ -47,13 +46,13 @@ public class OrdemServicoController {
 
     @PutMapping("/{id}")
     public OrdemServicoResponse atualizar(
-            @PathVariable UUID id, @Valid @RequestBody OrdemServicoRequest request) {
+            @PathVariable Long id, @Valid @RequestBody OrdemServicoRequest request) {
         return ordemServicoService.atualizar(id, request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletar(@PathVariable UUID id) {
+    public void deletar(@PathVariable Long id) {
         ordemServicoService.deletar(id);
     }
 }

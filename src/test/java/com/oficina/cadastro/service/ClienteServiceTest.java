@@ -12,7 +12,6 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,11 +29,11 @@ class ClienteServiceTest {
     private ClienteService clienteService;
 
     private Cliente cliente;
-    private UUID clienteId;
+    private Long clienteId;
 
     @BeforeEach
     void setUp() {
-        clienteId = UUID.randomUUID();
+        clienteId = 1L;
         cliente = Cliente.builder()
                 .id(clienteId)
                 .nome("João Silva")
@@ -92,7 +91,7 @@ class ClienteServiceTest {
                 true);
 
         Cliente novoCliente = Cliente.builder()
-                .id(UUID.randomUUID())
+                .id(2L)
                 .nome(request.nome())
                 .email(request.email())
                 .telefone(request.telefone())

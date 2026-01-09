@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -38,8 +37,8 @@ public class OrdemServicoIntegrationTest {
         private ObjectMapper objectMapper;
 
         private String authToken;
-        private String clienteId;
-        private String equipamentoId;
+        private Long clienteId;
+        private Long equipamentoId;
 
         @BeforeEach
         public void setup() throws Exception {
@@ -77,11 +76,11 @@ public class OrdemServicoIntegrationTest {
                                 .andReturn();
 
                 clienteId = objectMapper.readTree(clienteResult.getResponse().getContentAsString())
-                                .get("id").asText();
+                                .get("id").asLong();
 
                 // Criar um equipamento para usar nos testes
                 EquipamentoRequest equipamentoRequest = new EquipamentoRequest(
-                                UUID.fromString(clienteId),
+                                clienteId,
                                 "Notebook Dell",
                                 "Dell",
                                 "Inspiron 15",
@@ -97,15 +96,18 @@ public class OrdemServicoIntegrationTest {
                                 .andReturn();
 
                 equipamentoId = objectMapper.readTree(equipamentoResult.getResponse().getContentAsString())
-                                .get("id").asText();
+                                .get("id").asLong();
         }
 
         @Test
         public void deveCriarOrdemServicoComSucesso() throws Exception {
                 // Arrange
                 OrdemServicoRequest osRequest = new OrdemServicoRequest(
-                                UUID.fromString(clienteId),
-                                UUID.fromString(equipamentoId),
+                                null, // id
+                                clienteId,
+                                null, // clienteNome
+                                equipamentoId,
+                                null, // equipamentoDescricao
                                 null, // responsavelId
                                 StatusOrdemServico.RECEBIDO,
                                 "Manutenção preventiva - Limpeza e troca de pasta térmica",
@@ -140,8 +142,11 @@ public class OrdemServicoIntegrationTest {
         public void deveAtualizarStatusOrdemServicoComSucesso() throws Exception {
                 // Arrange - Criar uma OS primeiro
                 OrdemServicoRequest osRequest = new OrdemServicoRequest(
-                                UUID.fromString(clienteId),
-                                UUID.fromString(equipamentoId),
+                                null,
+                                clienteId,
+                                null,
+                                equipamentoId,
+                                null,
                                 null,
                                 StatusOrdemServico.RECEBIDO,
                                 "Troca de óleo e filtros",
@@ -159,13 +164,16 @@ public class OrdemServicoIntegrationTest {
                                 .andExpect(status().isCreated())
                                 .andReturn();
 
-                String osId = objectMapper.readTree(createResult.getResponse().getContentAsString())
-                                .get("id").asText();
+                Long osId = objectMapper.readTree(createResult.getResponse().getContentAsString())
+                                .get("id").asLong();
 
                 // Atualizar status
                 OrdemServicoRequest osAtualizada = new OrdemServicoRequest(
-                                UUID.fromString(clienteId),
-                                UUID.fromString(equipamentoId),
+                                null,
+                                clienteId,
+                                null,
+                                equipamentoId,
+                                null,
                                 null,
                                 StatusOrdemServico.EM_REPARO,
                                 "Troca de óleo e filtros",
@@ -196,8 +204,11 @@ public class OrdemServicoIntegrationTest {
         public void deveFalharAoCriarOSSemDescricao() throws Exception {
                 // Arrange - OS sem descrição do problema (campo obrigatório)
                 OrdemServicoRequest osRequest = new OrdemServicoRequest(
-                                UUID.fromString(clienteId),
-                                UUID.fromString(equipamentoId),
+                                null,
+                                clienteId,
+                                null,
+                                equipamentoId,
+                                null,
                                 null,
                                 StatusOrdemServico.RECEBIDO,
                                 "", // descrição vazia - deve falhar

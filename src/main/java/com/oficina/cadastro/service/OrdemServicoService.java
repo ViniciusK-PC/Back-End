@@ -12,7 +12,6 @@ import com.oficina.cadastro.domain.repository.UsuarioRepository;
 import com.oficina.cadastro.web.dto.OrdemServicoRequest;
 import com.oficina.cadastro.web.dto.OrdemServicoResponse;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class OrdemServicoService {
     private final EquipamentoRepository equipamentoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public List<OrdemServicoResponse> listar(StatusOrdemServico status, UUID clienteId) {
+    public List<OrdemServicoResponse> listar(StatusOrdemServico status, Long clienteId) {
         List<OrdemServico> ordens;
         if (status != null) {
             ordens = ordemServicoRepository.findByStatus(status);
@@ -38,7 +37,7 @@ public class OrdemServicoService {
         return ordens.stream().map(this::toResponse).collect(Collectors.toList());
     }
 
-    public OrdemServicoResponse buscar(UUID id) {
+    public OrdemServicoResponse buscar(Long id) {
         return toResponse(findOrThrow(id));
     }
 
@@ -49,37 +48,37 @@ public class OrdemServicoService {
         return toResponse(ordemServicoRepository.save(ordem));
     }
 
-    public OrdemServicoResponse atualizar(UUID id, OrdemServicoRequest request) {
+    public OrdemServicoResponse atualizar(Long id, OrdemServicoRequest request) {
         OrdemServico ordem = findOrThrow(id);
         applyRequest(request, ordem);
         ordem.recalcTotal();
         return toResponse(ordemServicoRepository.save(ordem));
     }
 
-    public void deletar(UUID id) {
+    public void deletar(Long id) {
         OrdemServico ordem = findOrThrow(id);
         ordemServicoRepository.deleteById(ordem.getId());
     }
 
-    private OrdemServico findOrThrow(UUID id) {
+    private OrdemServico findOrThrow(Long id) {
         return ordemServicoRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Ordem de serviço não encontrada"));
     }
 
-    private Cliente findCliente(UUID id) {
+    private Cliente findCliente(Long id) {
         return clienteRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
     }
 
-    private Equipamento findEquipamento(UUID id) {
+    private Equipamento findEquipamento(Long id) {
         return equipamentoRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Equipamento não encontrado"));
     }
 
-    private Usuario findUsuario(UUID id) {
+    private Usuario findUsuario(Long id) {
         if (id == null) {
             return null;
         }

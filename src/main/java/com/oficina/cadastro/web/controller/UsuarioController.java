@@ -5,7 +5,7 @@ import com.oficina.cadastro.web.dto.UsuarioRequest;
 import com.oficina.cadastro.web.dto.UsuarioResponse;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,7 +37,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public UsuarioResponse buscar(@PathVariable UUID id) {
+    public UsuarioResponse buscar(@PathVariable Long id) {
         return usuarioService.buscar(id);
     }
 
@@ -49,18 +49,18 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     public UsuarioResponse atualizar(
-            @PathVariable UUID id, @Valid @RequestBody UsuarioRequest request) {
+            @PathVariable Long id, @Valid @RequestBody UsuarioRequest request) {
         return usuarioService.atualizar(id, request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletar(@PathVariable UUID id) {
+    public void deletar(@PathVariable Long id) {
         usuarioService.deletar(id);
     }
 
     @PatchMapping("/{id}/status")
-    public UsuarioResponse alternarAtivo(@PathVariable UUID id) {
+    public UsuarioResponse alternarAtivo(@PathVariable Long id) {
         return usuarioService.alternarAtivo(id);
     }
 }

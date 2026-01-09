@@ -15,9 +15,8 @@ public class LoginResponse {
 
     private String token;
     private String tipo = "Bearer";
-    private UUID usuarioId;
+    private Long usuarioId;
     private String nome;
     private String email;
     private PerfilUsuario perfil;
 }
-

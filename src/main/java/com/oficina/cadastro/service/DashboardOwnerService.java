@@ -10,10 +10,8 @@ import com.oficina.cadastro.web.dto.TopClienteDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,7 +79,7 @@ public class DashboardOwnerService {
                 return results.stream()
                                 .limit(limit)
                                 .map(row -> TopClienteDTO.builder()
-                                                .id((UUID) row[0])
+                                                .id((Long) row[0])
                                                 .nome((String) row[1])
                                                 .totalOrdens((Long) row[2])
                                                 .valorTotal(row[3] != null

@@ -25,7 +25,7 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    public UsuarioResponse buscar(UUID id) {
+    public UsuarioResponse buscar(Long id) {
         return toResponse(findOrThrow(id));
     }
 
@@ -44,7 +44,7 @@ public class UsuarioService {
         return toResponse(usuarioRepository.save(usuario));
     }
 
-    public UsuarioResponse atualizar(UUID id, UsuarioRequest request) {
+    public UsuarioResponse atualizar(Long id, UsuarioRequest request) {
         Usuario usuario = findOrThrow(id);
         usuario.setNome(request.nome());
         usuario.setEmail(request.email());
@@ -58,19 +58,19 @@ public class UsuarioService {
         return toResponse(usuarioRepository.save(usuario));
     }
 
-    public void deletar(UUID id) {
+    public void deletar(Long id) {
         Usuario usuario = findOrThrow(id);
         usuarioRepository.delete(usuario);
     }
 
     @org.springframework.transaction.annotation.Transactional
-    public UsuarioResponse alternarAtivo(UUID id) {
+    public UsuarioResponse alternarAtivo(Long id) {
         Usuario usuario = findOrThrow(id);
         usuario.setAtivo(!usuario.isAtivo());
         return toResponse(usuarioRepository.saveAndFlush(usuario));
     }
 
-    private Usuario findOrThrow(UUID id) {
+    private Usuario findOrThrow(Long id) {
         return usuarioRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));

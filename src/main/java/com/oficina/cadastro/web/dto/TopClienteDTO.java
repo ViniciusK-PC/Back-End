@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TopClienteDTO {
-    private UUID id;
+    private Long id;
     private String nome;
     private Long totalOrdens;
     private Double valorTotal;

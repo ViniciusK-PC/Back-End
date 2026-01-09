@@ -7,7 +7,6 @@ import com.oficina.cadastro.domain.repository.EquipamentoRepository;
 import com.oficina.cadastro.web.dto.EquipamentoRequest;
 import com.oficina.cadastro.web.dto.EquipamentoResponse;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,13 +18,13 @@ public class EquipamentoService {
     private final EquipamentoRepository equipamentoRepository;
     private final ClienteRepository clienteRepository;
 
-    public List<EquipamentoResponse> listarPorCliente(UUID clienteId) {
+    public List<EquipamentoResponse> listarPorCliente(Long clienteId) {
         return equipamentoRepository.findByClienteId(clienteId).stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public EquipamentoResponse buscar(UUID id) {
+    public EquipamentoResponse buscar(Long id) {
         return toResponse(findOrThrow(id));
     }
 
@@ -35,19 +34,19 @@ public class EquipamentoService {
         return toResponse(equipamentoRepository.save(equipamento));
     }
 
-    public EquipamentoResponse atualizar(UUID id, EquipamentoRequest request) {
+    public EquipamentoResponse atualizar(Long id, EquipamentoRequest request) {
         Equipamento equipamento = findOrThrow(id);
         applyRequest(request, equipamento);
         return toResponse(equipamentoRepository.save(equipamento));
     }
 
-    private Equipamento findOrThrow(UUID id) {
+    private Equipamento findOrThrow(Long id) {
         return equipamentoRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Equipamento não encontrado"));
     }
 
-    private Cliente findCliente(UUID id) {
+    private Cliente findCliente(Long id) {
         return clienteRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));

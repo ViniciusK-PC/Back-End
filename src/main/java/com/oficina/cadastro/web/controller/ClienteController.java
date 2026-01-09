@@ -5,7 +5,6 @@ import com.oficina.cadastro.web.dto.ClienteRequest;
 import com.oficina.cadastro.web.dto.ClienteResponse;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,7 +31,7 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public ClienteResponse buscar(@PathVariable UUID id) {
+    public ClienteResponse buscar(@PathVariable Long id) {
         return clienteService.buscar(id);
     }
 
@@ -44,13 +43,13 @@ public class ClienteController {
 
     @PutMapping("/{id}")
     public ClienteResponse atualizar(
-            @PathVariable UUID id, @Valid @RequestBody ClienteRequest request) {
+            @PathVariable Long id, @Valid @RequestBody ClienteRequest request) {
         return clienteService.atualizar(id, request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletar(@PathVariable UUID id) {
+    public void deletar(@PathVariable Long id) {
         clienteService.deletar(id);
     }
 }

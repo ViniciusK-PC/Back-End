@@ -5,7 +5,6 @@ import com.oficina.cadastro.web.dto.EquipamentoRequest;
 import com.oficina.cadastro.web.dto.EquipamentoResponse;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,12 +26,12 @@ public class EquipamentoController {
 
     @GetMapping
     public List<EquipamentoResponse> listarPorCliente(
-            @RequestParam(name = "clienteId") UUID clienteId) {
+            @RequestParam(name = "clienteId") Long clienteId) {
         return equipamentoService.listarPorCliente(clienteId);
     }
 
     @GetMapping("/{id}")
-    public EquipamentoResponse buscar(@PathVariable UUID id) {
+    public EquipamentoResponse buscar(@PathVariable Long id) {
         return equipamentoService.buscar(id);
     }
 
@@ -44,8 +43,7 @@ public class EquipamentoController {
 
     @PutMapping("/{id}")
     public EquipamentoResponse atualizar(
-            @PathVariable UUID id, @Valid @RequestBody EquipamentoRequest request) {
+            @PathVariable Long id, @Valid @RequestBody EquipamentoRequest request) {
         return equipamentoService.atualizar(id, request);
     }
 }
-

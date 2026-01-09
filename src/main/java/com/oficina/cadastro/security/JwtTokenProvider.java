@@ -26,7 +26,7 @@ public class JwtTokenProvider {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(UUID usuarioId, String email, String perfil) {
+    public String generateToken(Long usuarioId, String email, String perfil) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpiration);
 
@@ -41,14 +41,14 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public UUID getUserIdFromToken(String token) {
+    public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
 
-        return UUID.fromString(claims.getSubject());
+        return Long.valueOf(claims.getSubject());
     }
 
     public String getEmailFromToken(String token) {
@@ -83,4 +83,3 @@ public class JwtTokenProvider {
         }
     }
 }
-

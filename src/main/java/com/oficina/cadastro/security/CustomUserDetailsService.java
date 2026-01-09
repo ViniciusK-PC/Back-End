@@ -38,7 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                                 .build();
         }
 
-        public UserDetails loadUserById(UUID id) {
+        public UserDetails loadUserById(Long id) {
                 Usuario usuario = usuarioRepository
                                 .findById(id)
                                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + id));

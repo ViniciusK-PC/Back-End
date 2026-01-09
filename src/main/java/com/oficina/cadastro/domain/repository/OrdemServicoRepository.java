@@ -2,17 +2,14 @@ package com.oficina.cadastro.domain.repository;
 
 import com.oficina.cadastro.domain.enums.StatusOrdemServico;
 import com.oficina.cadastro.domain.model.OrdemServico;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 public interface OrdemServicoRepository
-                extends org.springframework.data.jpa.repository.JpaRepository<OrdemServico, UUID> {
+                extends org.springframework.data.jpa.repository.JpaRepository<OrdemServico, Long> {
 
         List<OrdemServico> findByStatus(StatusOrdemServico status);
 
-        List<OrdemServico> findByClienteId(UUID clienteId);
+        List<OrdemServico> findByClienteId(Long clienteId);
 
         Long countByStatusIn(List<StatusOrdemServico> statuses);
 

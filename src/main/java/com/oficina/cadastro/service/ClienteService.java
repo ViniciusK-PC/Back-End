@@ -5,7 +5,6 @@ import com.oficina.cadastro.domain.repository.ClienteRepository;
 import com.oficina.cadastro.web.dto.ClienteRequest;
 import com.oficina.cadastro.web.dto.ClienteResponse;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class ClienteService {
         return clientes.stream().map(this::toResponse).collect(Collectors.toList());
     }
 
-    public ClienteResponse buscar(UUID id) {
+    public ClienteResponse buscar(Long id) {
         return toResponse(findOrThrow(id));
     }
 
@@ -33,18 +32,18 @@ public class ClienteService {
         return toResponse(clienteRepository.save(cliente));
     }
 
-    public ClienteResponse atualizar(UUID id, ClienteRequest request) {
+    public ClienteResponse atualizar(Long id, ClienteRequest request) {
         Cliente cliente = findOrThrow(id);
         applyRequest(request, cliente);
         return toResponse(clienteRepository.save(cliente));
     }
 
-    public void deletar(UUID id) {
+    public void deletar(Long id) {
         Cliente cliente = findOrThrow(id);
         clienteRepository.deleteById(cliente.getId());
     }
 
-    private Cliente findOrThrow(UUID id) {
+    private Cliente findOrThrow(Long id) {
         return clienteRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));

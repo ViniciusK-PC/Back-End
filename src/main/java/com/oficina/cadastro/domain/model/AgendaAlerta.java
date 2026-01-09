@@ -32,8 +32,8 @@ import lombok.Setter;
 public class AgendaAlerta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "ordem_servico_id")
