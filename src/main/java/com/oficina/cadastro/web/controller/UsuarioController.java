@@ -38,6 +38,7 @@ public class UsuarioController {
 
     @GetMapping("/role/{perfil}")
     public List<UsuarioResponse> listarPorPerfil(@PathVariable String perfil) {
+        System.out.println("Perfil recebido via rota /role: " + perfil);
         // Mapeia termos usados pelo frontend para o Enum correto
         com.oficina.cadastro.domain.enums.PerfilUsuario perfilEnum = com.oficina.cadastro.domain.enums.PerfilUsuario
                 .fromString(perfil);

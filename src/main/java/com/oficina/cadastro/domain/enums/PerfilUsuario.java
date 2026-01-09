@@ -24,22 +24,23 @@ public enum PerfilUsuario {
 
         // Mapeamentos específicos para evitar erros de frontend e suporte a termos
         // variados
-        if (normalized.equals("ADM") || normalized.equals("ADMIN") || normalized.equals("ADMINISTRADOR"))
+        if (normalized.equals("ADM") || normalized.equals("ADMIN") || normalized.equals("ADMINISTRADOR")
+                || normalized.equals("ADMINISTRADORES"))
             return ADMINISTRADOR;
 
-        if (normalized.equals("MECANICO") || normalized.equals("MECANICA"))
+        if (normalized.equals("MECANICO") || normalized.equals("MECANICA") || normalized.equals("MECANICOS"))
             return MECANICO;
 
-        if (normalized.equals("TECNICO"))
+        if (normalized.equals("TECNICO") || normalized.equals("TECNICOS"))
             return TECNICO;
 
         if (normalized.equals("RECEPCAO") || normalized.equals("RECEPCIONISTA"))
             return RECEPCAO;
 
-        if (normalized.equals("ATENDENTE") || normalized.equals("ATENDIMENTO"))
+        if (normalized.equals("ATENDENTE") || normalized.equals("ATENDIMENTO") || normalized.equals("ATENDENTES"))
             return ATENDENTE;
 
-        if (normalized.equals("GERENTE") || normalized.equals("GERENCIA"))
+        if (normalized.equals("GERENTE") || normalized.equals("GERENCIA") || normalized.equals("GERENTES"))
             return GERENTE;
 
         if (normalized.equals("DONO") || normalized.equals("PROPRIETARIO"))
