@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -45,5 +47,15 @@ public class UsuarioController {
             @PathVariable UUID id, @Valid @RequestBody UsuarioRequest request) {
         return usuarioService.atualizar(id, request);
     }
-}
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable UUID id) {
+        usuarioService.deletar(id);
+    }
+
+    @PatchMapping("/{id}/ativo")
+    public UsuarioResponse alternarAtivo(@PathVariable UUID id) {
+        return usuarioService.alternarAtivo(id);
+    }
+}

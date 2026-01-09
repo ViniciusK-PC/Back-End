@@ -2,6 +2,7 @@ package com.oficina.cadastro.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -11,14 +12,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Configuration
-@Profile("heroku")
 public class HerokuDatabaseConfig {
 
     @Bean
+    @Primary
+    @Profile("!test")
     public DataSource dataSource() throws URISyntaxException {
         String databaseUrl = System.getenv("DATABASE_URL");
-        if (databaseUrl == null) {
-            throw new RuntimeException("DATABASE_URL environment variable is not set");
+        if (databaseUrl == null || databaseUrl.isEmpty()) {
+            return null;
         }
 
         URI dbUri = new URI(databaseUrl);

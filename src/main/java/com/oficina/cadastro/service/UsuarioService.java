@@ -29,6 +29,10 @@ public class UsuarioService {
     }
 
     public UsuarioResponse criar(UsuarioRequest request) {
+        if (request.senha() == null || request.senha().isBlank()) {
+            throw new RuntimeException("A senha é obrigatória para novos usuários");
+        }
+
         Usuario usuario = Usuario.builder()
                 .nome(request.nome())
                 .email(request.email())
@@ -50,6 +54,17 @@ public class UsuarioService {
         if (request.senha() != null && !request.senha().isBlank()) {
             usuario.setSenhaHash(passwordEncoder.encode(request.senha()));
         }
+        return toResponse(usuarioRepository.save(usuario));
+    }
+
+    public void deletar(UUID id) {
+        Usuario usuario = findOrThrow(id);
+        usuarioRepository.delete(usuario);
+    }
+
+    public UsuarioResponse alternarAtivo(UUID id) {
+        Usuario usuario = findOrThrow(id);
+        usuario.setAtivo(!usuario.isAtivo());
         return toResponse(usuarioRepository.save(usuario));
     }
 
