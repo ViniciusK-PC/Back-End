@@ -32,16 +32,21 @@ public class DataInitializer {
                 System.out.println("Aviso: Falha ao tentar remover restrição: " + e.getMessage());
             }
 
-            // Criar usuário DONO se não existir
-            if (usuarioRepository.count() == 0) {
+            // Criar ou Sincronizar usuário DONO (Mauricio Silva)
+            if (usuarioRepository.findByEmail("mauricio@oficina.com").isEmpty()) {
                 Usuario mauricio = new Usuario();
-                mauricio.setNome("Mauricio");
+                mauricio.setNome("Mauricio Silva");
                 mauricio.setEmail("mauricio@oficina.com");
                 mauricio.setSenhaHash(passwordEncoder.encode("admin123"));
                 mauricio.setPerfil(PerfilUsuario.DONO);
                 mauricio.setAtivo(true);
                 usuarioRepository.save(mauricio);
-                System.out.println("Usuário Dono criado: Mauricio (mauricio@oficina.com)");
+                System.out.println("Usuário Maurício Silva criado com perfil DONO.");
+            } else {
+                // Força a sincronização se já existir mas estiver com nome/perfil errado
+                jdbcTemplate.update(
+                        "UPDATE usuarios SET nome = 'Mauricio Silva', perfil = 'DONO' WHERE email = 'mauricio@oficina.com'");
+                System.out.println("Usuário Maurício Silva sincronizado com perfil DONO.");
             }
 
             // Criar usuário ATENDENTE para teste se não houver um
