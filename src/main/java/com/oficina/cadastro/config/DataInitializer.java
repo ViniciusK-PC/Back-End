@@ -43,10 +43,12 @@ public class DataInitializer {
                 usuarioRepository.save(mauricio);
                 System.out.println("Usuário Maurício Silva criado com perfil DONO.");
             } else {
-                // Força a sincronização se já existir mas estiver com nome/perfil errado
+                // Força a sincronização de nome, perfil e SENHA
+                String senhaHash = passwordEncoder.encode("admin123");
                 jdbcTemplate.update(
-                        "UPDATE usuarios SET nome = 'Mauricio Silva', perfil = 'DONO' WHERE email = 'mauricio@oficina.com'");
-                System.out.println("Usuário Maurício Silva sincronizado com perfil DONO.");
+                        "UPDATE usuarios SET nome = 'Mauricio Silva', perfil = 'DONO', senha_hash = ? WHERE email = 'mauricio@oficina.com'",
+                        senhaHash);
+                System.out.println("Usuário Maurício Silva sincronizado com perfil DONO e senha redefinida.");
             }
 
             // Criar usuário ATENDENTE para teste se não houver um
