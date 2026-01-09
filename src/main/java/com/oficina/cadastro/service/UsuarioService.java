@@ -20,7 +20,8 @@ public class UsuarioService {
 
     public List<UsuarioResponse> listar(String nome, String email,
             com.oficina.cadastro.domain.enums.PerfilUsuario perfil, Boolean ativo) {
-        return usuarioRepository.findByFiltros(nome, email, perfil, ativo).stream()
+        return usuarioRepository
+                .findByFiltros(nome, email, perfil != null ? perfil.name() : null, ativo).stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
