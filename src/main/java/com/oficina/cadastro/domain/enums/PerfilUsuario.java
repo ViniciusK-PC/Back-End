@@ -16,12 +16,39 @@ public enum PerfilUsuario {
         if (value == null || value.isBlank())
             return null;
 
-        String upperValue = value.toUpperCase();
+        // Remove acentos e converte para maiúsculo para comparação robusta
+        String normalized = java.text.Normalizer.normalize(value, java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .toUpperCase()
+                .trim();
 
-        // Mapeamentos específicos para evitar erros
-        if (upperValue.equals("ADM"))
+        // Mapeamentos específicos para evitar erros de frontend e suporte a termos
+        // variados
+        if (normalized.equals("ADM") || normalized.equals("ADMIN") || normalized.equals("ADMINISTRADOR"))
             return ADMINISTRADOR;
 
-        return PerfilUsuario.valueOf(upperValue);
+        if (normalized.equals("MECANICO") || normalized.equals("MECANICA"))
+            return MECANICO;
+
+        if (normalized.equals("TECNICO"))
+            return TECNICO;
+
+        if (normalized.equals("RECEPCAO") || normalized.equals("RECEPCIONISTA"))
+            return RECEPCAO;
+
+        if (normalized.equals("ATENDENTE") || normalized.equals("ATENDIMENTO"))
+            return ATENDENTE;
+
+        if (normalized.equals("GERENTE") || normalized.equals("GERENCIA"))
+            return GERENTE;
+
+        if (normalized.equals("DONO") || normalized.equals("PROPRIETARIO"))
+            return DONO;
+
+        try {
+            return PerfilUsuario.valueOf(normalized);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 }

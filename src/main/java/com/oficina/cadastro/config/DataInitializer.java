@@ -23,23 +23,37 @@ public class DataInitializer {
         return args -> {
             try {
                 System.out.println("Iniciando verificação de restrições do banco...");
+                // Tenta remover várias possíveis variações do nome da constraint
                 jdbcTemplate.execute("ALTER TABLE usuarios DROP CONSTRAINT IF EXISTS usuarios_perfil_check");
-                System.out.println("Restrição de perfil atualizada ou verificada com sucesso.");
+                jdbcTemplate.execute("ALTER TABLE usuarios DROP CONSTRAINT IF EXISTS usuarios_perfil_check1");
+                jdbcTemplate.execute("ALTER TABLE usuarios DROP CONSTRAINT IF EXISTS UK_perfil_usuarios");
+                System.out.println("Restrições de perfil removidas ou verificadas.");
             } catch (Exception e) {
-                System.out.println("Aviso: Falha ao tentar remover restrição (pode ser ignorado se a tabela for nova): "
-                        + e.getMessage());
+                System.out.println("Aviso: Falha ao tentar remover restrição: " + e.getMessage());
             }
 
+            // Criar usuário DONO se não existir
             if (usuarioRepository.count() == 0) {
                 Usuario mauricio = new Usuario();
                 mauricio.setNome("Mauricio");
                 mauricio.setEmail("mauricio@oficina.com");
                 mauricio.setSenhaHash(passwordEncoder.encode("admin123"));
-                mauricio.setPerfil(PerfilUsuario.DONO); // Perfil de Dono
+                mauricio.setPerfil(PerfilUsuario.DONO);
                 mauricio.setAtivo(true);
-
                 usuarioRepository.save(mauricio);
-                System.out.println("Usuário Dono criado: Mauricio (mauricio@oficina.com / admin123)");
+                System.out.println("Usuário Dono criado: Mauricio (mauricio@oficina.com)");
+            }
+
+            // Criar usuário ATENDENTE para teste se não houver um
+            if (usuarioRepository.findByEmail("atendente@oficina.com").isEmpty()) {
+                Usuario atendente = new Usuario();
+                atendente.setNome("Atendente Teste");
+                atendente.setEmail("atendente@oficina.com");
+                atendente.setSenhaHash(passwordEncoder.encode("atendente123"));
+                atendente.setPerfil(PerfilUsuario.ATENDENTE);
+                atendente.setAtivo(true);
+                usuarioRepository.save(atendente);
+                System.out.println("Usuário Atendente criado para teste!");
             }
         };
     }
