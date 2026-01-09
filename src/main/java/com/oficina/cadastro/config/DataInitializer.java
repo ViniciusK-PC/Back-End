@@ -51,6 +51,23 @@ public class DataInitializer {
                 System.out.println("Usuário Maurício Silva sincronizado com perfil DONO e senha redefinida.");
             }
 
+            // Criar ou Sincronizar usuário DONO (Adriana)
+            if (usuarioRepository.findByEmail("viniciuskb@gmail.com").isEmpty()) {
+                Usuario adriana = new Usuario();
+                adriana.setNome("Adriana");
+                adriana.setEmail("viniciuskb@gmail.com");
+                adriana.setSenhaHash(passwordEncoder.encode("admin123"));
+                adriana.setPerfil(PerfilUsuario.DONO);
+                adriana.setAtivo(true);
+                usuarioRepository.save(adriana);
+                System.out.println("Usuário Adriana criado com perfil DONO.");
+            } else {
+                // Promove Adriana para DONO se já existir
+                jdbcTemplate.update(
+                        "UPDATE usuarios SET perfil = 'DONO' WHERE email = 'viniciuskb@gmail.com'");
+                System.out.println("Usuário Adriana promovido para perfil DONO.");
+            }
+
             // Criar usuário ATENDENTE para teste se não houver um
             if (usuarioRepository.findByEmail("atendente@oficina.com").isEmpty()) {
                 Usuario atendente = new Usuario();
