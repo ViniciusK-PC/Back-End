@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,8 +28,12 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @GetMapping
-    public List<UsuarioResponse> listar() {
-        return usuarioService.listar();
+    public List<UsuarioResponse> listar(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) com.oficina.cadastro.domain.enums.PerfilUsuario perfil,
+            @RequestParam(required = false) Boolean ativo) {
+        return usuarioService.listar(nome, email, perfil, ativo);
     }
 
     @GetMapping("/{id}")

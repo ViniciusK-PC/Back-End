@@ -18,8 +18,9 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public List<UsuarioResponse> listar() {
-        return usuarioRepository.findAll().stream()
+    public List<UsuarioResponse> listar(String nome, String email,
+            com.oficina.cadastro.domain.enums.PerfilUsuario perfil, Boolean ativo) {
+        return usuarioRepository.findByFiltros(nome, email, perfil, ativo).stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
