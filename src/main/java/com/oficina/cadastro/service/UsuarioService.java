@@ -5,7 +5,7 @@ import com.oficina.cadastro.domain.repository.UsuarioRepository;
 import com.oficina.cadastro.web.dto.UsuarioRequest;
 import com.oficina.cadastro.web.dto.UsuarioResponse;
 import java.util.List;
-import java.util.UUID;
+
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

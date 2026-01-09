@@ -11,7 +11,6 @@ import com.oficina.cadastro.web.dto.ClienteResponse;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,12 +27,12 @@ class ClienteControllerTest {
         @InjectMocks
         private ClienteController clienteController;
 
-        private UUID clienteId;
+        private Long clienteId;
         private ClienteResponse clienteResponse;
 
         @BeforeEach
         void setUp() {
-                clienteId = UUID.randomUUID();
+                clienteId = 1L;
                 clienteResponse = new ClienteResponse(
                                 clienteId,
                                 "João Silva",
@@ -74,7 +73,7 @@ class ClienteControllerTest {
                                 true);
 
                 ClienteResponse response = new ClienteResponse(
-                                UUID.randomUUID(),
+                                2L,
                                 "Maria Santos",
                                 "98765432100",
                                 "maria@example.com",

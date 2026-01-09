@@ -5,7 +5,6 @@ import com.oficina.cadastro.domain.model.AgendaAlerta;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface AgendaAlertaRepository
                 extends org.springframework.data.jpa.repository.JpaRepository<AgendaAlerta, Long> {

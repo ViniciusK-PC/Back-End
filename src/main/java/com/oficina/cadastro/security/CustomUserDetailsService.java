@@ -3,7 +3,7 @@ package com.oficina.cadastro.security;
 import com.oficina.cadastro.domain.model.Usuario;
 import com.oficina.cadastro.domain.repository.UsuarioRepository;
 import java.util.Collections;
-import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
