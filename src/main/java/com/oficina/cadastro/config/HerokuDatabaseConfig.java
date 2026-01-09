@@ -12,18 +12,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Configuration
+@org.springframework.boot.autoconfigure.condition.ConditionalOnExpression("#{environment.getProperty('DATABASE_URL') != null}")
 public class HerokuDatabaseConfig {
 
     @Bean
     @Primary
     @Profile("!test")
     public DataSource dataSource() {
-        String databaseUrl = System.getenv("DATABASE_URL");
-        
-        if (databaseUrl == null || databaseUrl.isBlank()) {
-            System.out.println("DATABASE_URL não encontrada nas variáveis de ambiente. Usando application.properties.");
-            return null;
-        }
 
         try {
             System.out.println("Configurando Heroku Postgres a partir da DATABASE_URL...");
