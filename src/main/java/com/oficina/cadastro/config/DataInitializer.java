@@ -22,13 +22,12 @@ public class DataInitializer {
     public CommandLineRunner initData() {
         return args -> {
             try {
-                // Remove a restrição antiga para que o Hibernate possa atualizar com o novo
-                // perfil ATENDENTE
+                System.out.println("Iniciando verificação de restrições do banco...");
                 jdbcTemplate.execute("ALTER TABLE usuarios DROP CONSTRAINT IF EXISTS usuarios_perfil_check");
-                System.out.println("Restrição de perfil atualizada no banco de dados.");
+                System.out.println("Restrição de perfil atualizada ou verificada com sucesso.");
             } catch (Exception e) {
-                System.err.println(
-                        "Aviso: Não foi possível atualizar a restrição (pode já ter sido removida): " + e.getMessage());
+                System.out.println("Aviso: Falha ao tentar remover restrição (pode ser ignorado se a tabela for nova): "
+                        + e.getMessage());
             }
 
             if (usuarioRepository.count() == 0) {
