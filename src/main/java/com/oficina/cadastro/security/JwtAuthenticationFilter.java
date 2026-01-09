@@ -29,9 +29,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
-        
-        // Ignorar rotas públicas - não processar JWT para estas rotas
-        if (path.startsWith("/api/auth/") || path.startsWith("/api/util/") || path.equals("/error")) {
+
+        // Ignorar rotas públicas e requisições OPTIONS
+        if (request.getMethod().equalsIgnoreCase("OPTIONS") ||
+                path.startsWith("/api/auth/") ||
+                path.startsWith("/api/util/") ||
+                path.equals("/error")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -44,12 +47,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String email = tokenProvider.getEmailFromToken(jwt);
                 String perfil = tokenProvider.getPerfilFromToken(jwt);
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                userId,
-                                null,
-                                java.util.Collections.singletonList(
-                                        new SimpleGrantedAuthority("ROLE_" + perfil)));
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userId,
+                        null,
+                        java.util.Collections.singletonList(
+                                new SimpleGrantedAuthority("ROLE_" + perfil)));
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -69,4 +71,3 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 }
-

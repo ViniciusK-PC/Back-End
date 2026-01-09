@@ -26,7 +26,8 @@ public class CorsConfig {
 
                 configuration.setAllowedMethods(
                                 Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
-                configuration.setAllowedHeaders(Arrays.asList("*"));
+                configuration.setAllowedHeaders(
+                                Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With", "Origin"));
                 configuration.setAllowCredentials(true);
                 configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Total-Count"));
                 configuration.setMaxAge(3600L);
@@ -34,13 +35,5 @@ public class CorsConfig {
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
                 source.registerCorsConfiguration("/**", configuration);
                 return source;
-        }
-
-        @Bean
-        public org.springframework.boot.web.servlet.FilterRegistrationBean<org.springframework.web.filter.CorsFilter> corsFilter() {
-                org.springframework.boot.web.servlet.FilterRegistrationBean<org.springframework.web.filter.CorsFilter> bean = new org.springframework.boot.web.servlet.FilterRegistrationBean<>(
-                                new org.springframework.web.filter.CorsFilter(corsConfigurationSource()));
-                bean.setOrder(org.springframework.core.Ordered.HIGHEST_PRECEDENCE);
-                return bean;
         }
 }
