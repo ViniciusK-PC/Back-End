@@ -1,6 +1,5 @@
 package com.oficina.cadastro.config;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -13,33 +12,48 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Configuration
-@ConditionalOnProperty(name = "DATABASE_URL")
 public class HerokuDatabaseConfig {
 
     @Bean
     @Primary
     @Profile("!test")
-    public DataSource dataSource() throws URISyntaxException {
+    public DataSource dataSource() {
         String databaseUrl = System.getenv("DATABASE_URL");
-        URI dbUri = new URI(databaseUrl);
+        
+        if (databaseUrl == null || databaseUrl.isBlank()) {
+            System.out.println("DATABASE_URL não encontrada nas variáveis de ambiente. Usando application.properties.");
+            return null;
+        }
 
-        String username = dbUri.getUserInfo().split(":")[0];
-        String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath()
-                + "?sslmode=require";
+        try {
+            System.out.println("Configurando Heroku Postgres a partir da DATABASE_URL...");
+            URI dbUri = new URI(databaseUrl);
 
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(dbUrl);
-        config.setUsername(username);
-        config.setPassword(password);
-        config.setDriverClassName("org.postgresql.Driver");
+            String username = dbUri.getUserInfo().split(":")[0];
+            String password = dbUri.getUserInfo().split(":")[1];
+            String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath()
+                    + "?sslmode=require";
 
-        // Configurações otimizadas para Heroku
-        config.setMaximumPoolSize(5);
-        config.setMinimumIdle(1);
-        config.setIdleTimeout(10000);
-        config.setMaxLifetime(20000);
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(dbUrl);
+            config.setUsername(username);
+            config.setPassword(password);
+            config.setDriverClassName("org.postgresql.Driver");
 
-        return new HikariDataSource(config);
+            // Configurações para o Heroku
+            config.setMaximumPoolSize(5);
+            config.setMinimumIdle(1);
+            config.setIdleTimeout(10000);
+            config.setMaxLifetime(20000);
+            config.setConnectionTimeout(30000);
+
+            return new HikariDataSource(config);
+        } catch (URISyntaxException e) {
+            System.err.println("Erro de sintaxe na DATABASE_URL: " + e.getMessage());
+            return null;
+        } catch (Exception e) {
+            System.err.println("Erro inesperado ao configurar DataSource: " + e.getMessage());
+            return null;
+        }
     }
 }
