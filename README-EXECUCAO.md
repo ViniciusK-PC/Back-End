@@ -6,18 +6,13 @@ Este documento explica como executar o backend do projeto **Cadastro de Clientes
 
 - **Java 17** ou superior instalado
 - **Maven** (opcional, o projeto usa Maven Wrapper)
-- **Conta Supabase** com um projeto PostgreSQL configurado
+- **Banco de Dados**: H2 (Padrão) ou PostgreSQL configurado
 
-## ⚙️ Configuração do Banco de Dados
+### Configuração Local (H2)
+O projeto vem configurado para usar o banco H2 em memória por padrão para testes locais. Não é necessária nenhuma configuração adicional.
 
-### Supabase PostgreSQL
-
-O projeto usa **Supabase** como banco de dados. Configure suas credenciais no arquivo `.env`:
-
-```env
-DATABASE_PASSWORD=sua_senha_do_supabase
-JWT_SECRET=sua_chave_secreta_jwt
-```
+### Configuração PostgreSQL (Opcional)
+Se desejar usar PostgreSQL, configure as variáveis no seu ambiente ou no `application.properties`.
 
 ## ▶️ Formas de Executar
 
@@ -62,11 +57,8 @@ Após iniciar, o backend estará disponível em:
 
 ## 🗄️ Banco de Dados
 
-O projeto usa **Supabase PostgreSQL**:
-
-- **Host**: Configurado em `application.properties`
-- **Porta**: 5432
-- **Senha**: Deve estar no arquivo `.env`
+- **Desenvolvimento**: H2 em memória (limpa ao reiniciar)
+- **H2 Console**: Disponível em `/h2-console` quando rodando com o perfil `local`
 
 ## 🛑 Parando o Servidor
 
@@ -92,9 +84,8 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### Erro de Conexão com Banco de Dados
-- Verifique se o arquivo `.env` existe e contém `DATABASE_PASSWORD`
-- Verifique se o projeto Supabase está ativo
-- Confirme a URL do banco em `application.properties`
+- Verifique as credenciais no `application.properties`
+- Confirme se o banco de dados está acessível
 
 ## 📝 Logs
 

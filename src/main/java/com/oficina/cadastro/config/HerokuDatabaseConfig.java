@@ -34,6 +34,12 @@ public class HerokuDatabaseConfig {
         config.setPassword(password);
         config.setDriverClassName("org.postgresql.Driver");
 
+        // Configurações otimizadas para Heroku
+        config.setMaximumPoolSize(5);
+        config.setMinimumIdle(1);
+        config.setIdleTimeout(10000);
+        config.setMaxLifetime(20000);
+
         return new HikariDataSource(config);
     }
 }

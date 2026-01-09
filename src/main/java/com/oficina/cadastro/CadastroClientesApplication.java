@@ -17,9 +17,6 @@ import org.springframework.core.env.Environment;
 public class CadastroClientesApplication {
 
 	public static void main(String[] args) {
-		// Forçar uso de IPv4 para evitar problemas de conexão com Supabase no Railway
-		System.setProperty("java.net.preferIPv4Stack", "true");
-		System.setProperty("java.net.preferIPv6Addresses", "false");
 		SpringApplication.run(CadastroClientesApplication.class, args);
 	}
 
