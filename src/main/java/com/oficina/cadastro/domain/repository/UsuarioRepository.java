@@ -14,7 +14,7 @@ public interface UsuarioRepository extends org.springframework.data.jpa.reposito
                         +
                         "(CAST(:email AS varchar) IS NULL OR LOWER(u.email) LIKE LOWER(CONCAT('%', CAST(:email AS varchar), '%'))) AND "
                         +
-                        "(CAST(:#{#perfil?.name()} AS varchar) IS NULL OR u.perfil = CAST(:#{#perfil?.name()} AS varchar)) AND "
+                        "(CAST(:#{#perfil?.name()} AS varchar) IS NULL OR u.perfil = CAST(:#{#perfil?.name()} AS varchar) OR (CAST(:#{#perfil?.name()} AS varchar) = 'ADMINISTRADOR' AND u.perfil = 'DONO')) AND "
                         +
                         "(CAST(:ativo AS boolean) IS NULL OR u.ativo = CAST(:ativo AS boolean))", nativeQuery = true)
         List<Usuario> findByFiltros(
