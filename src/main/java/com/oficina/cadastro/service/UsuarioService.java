@@ -62,10 +62,11 @@ public class UsuarioService {
         usuarioRepository.delete(usuario);
     }
 
+    @org.springframework.transaction.annotation.Transactional
     public UsuarioResponse alternarAtivo(UUID id) {
         Usuario usuario = findOrThrow(id);
         usuario.setAtivo(!usuario.isAtivo());
-        return toResponse(usuarioRepository.save(usuario));
+        return toResponse(usuarioRepository.saveAndFlush(usuario));
     }
 
     private Usuario findOrThrow(UUID id) {
