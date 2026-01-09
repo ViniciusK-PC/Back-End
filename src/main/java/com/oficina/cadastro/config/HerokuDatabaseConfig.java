@@ -1,5 +1,6 @@
 package com.oficina.cadastro.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -12,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Configuration
+@ConditionalOnProperty(name = "DATABASE_URL")
 public class HerokuDatabaseConfig {
 
     @Bean
@@ -19,10 +21,6 @@ public class HerokuDatabaseConfig {
     @Profile("!test")
     public DataSource dataSource() throws URISyntaxException {
         String databaseUrl = System.getenv("DATABASE_URL");
-        if (databaseUrl == null || databaseUrl.isEmpty()) {
-            return null;
-        }
-
         URI dbUri = new URI(databaseUrl);
 
         String username = dbUri.getUserInfo().split(":")[0];
