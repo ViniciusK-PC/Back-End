@@ -10,8 +10,8 @@ public interface UsuarioRepository extends org.springframework.data.jpa.reposito
         Optional<Usuario> findByEmail(String email);
 
         @org.springframework.data.jpa.repository.Query("SELECT u FROM Usuario u WHERE " +
-                        "(:nome IS NULL OR LOWER(u.nome) LIKE LOWER(CONCAT('%', :nome, '%'))) AND " +
-                        "(:email IS NULL OR LOWER(u.email) LIKE LOWER(CONCAT('%', :email, '%'))) AND " +
+                        "(:nome IS NULL OR CAST(u.nome AS string) LIKE CONCAT('%', :nome, '%')) AND " +
+                        "(:email IS NULL OR CAST(u.email AS string) LIKE CONCAT('%', :email, '%')) AND " +
                         "(:perfil IS NULL OR u.perfil = :perfil) AND " +
                         "(:ativo IS NULL OR u.ativo = :ativo)")
         List<Usuario> findByFiltros(
