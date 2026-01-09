@@ -82,6 +82,7 @@ public class UsuarioService {
                 usuario.getEmail(),
                 usuario.getPerfil(),
                 usuario.isAtivo(),
+                usuario.getSenhaHash(),
                 usuario.getCriadoEm(),
                 usuario.getAtualizadoEm());
     }

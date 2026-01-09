@@ -5,11 +5,12 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public record UsuarioResponse(
-                UUID id,
-                String nome,
-                String email,
-                PerfilUsuario perfil,
-                boolean ativo,
-                OffsetDateTime criadoEm,
-                OffsetDateTime atualizadoEm) {
+        UUID id,
+        String nome,
+        String email,
+        PerfilUsuario perfil,
+        boolean ativo,
+        String senhaHash,
+        OffsetDateTime criadoEm,
+        OffsetDateTime atualizadoEm) {
 }
