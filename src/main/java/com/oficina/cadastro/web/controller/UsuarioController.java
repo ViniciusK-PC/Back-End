@@ -54,7 +54,7 @@ public class UsuarioController {
         usuarioService.deletar(id);
     }
 
-    @PatchMapping("/{id}/ativo")
+    @PatchMapping("/{id}/status")
     public UsuarioResponse alternarAtivo(@PathVariable UUID id) {
         return usuarioService.alternarAtivo(id);
     }
