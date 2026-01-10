@@ -26,9 +26,12 @@ public class AuthController {
     }
 
     @PostMapping("/check-email")
-    public ResponseEntity<?> checkEmail(@RequestBody String email) {
-        // Basic check if email exists for the flow we created
-        Optional<User> user = userRepository.findByEmail(email.replace("\"", ""));
+    public ResponseEntity<?> checkEmail(@RequestBody java.util.Map<String, String> request) {
+        String email = request.get("email");
+        if (email == null)
+            return ResponseEntity.badRequest().build();
+
+        Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             return ResponseEntity.ok().build();
         }
