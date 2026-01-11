@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/check-email")
-    public ResponseEntity<?> checkEmail(@RequestBody java.util.Map<String, String> request) {
+    public ResponseEntity<?> checkEmail(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         if (email == null)
             return ResponseEntity.badRequest().build();
