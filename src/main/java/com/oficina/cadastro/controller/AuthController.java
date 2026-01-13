@@ -3,7 +3,7 @@ package com.oficina.cadastro.controller;
 import com.oficina.cadastro.model.User;
 import com.oficina.cadastro.model.VerificationCode;
 import com.oficina.cadastro.repository.UserRepository;
-import com.oficina.cadastro.service.SendGridEmailService;
+import com.oficina.cadastro.service.BrevoEmailService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class AuthController {
     private UserRepository userRepository;
 
     @Autowired
-    private SendGridEmailService emailService;
+    private BrevoEmailService emailService;
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@Valid @RequestBody User user) {

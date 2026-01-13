@@ -1,7 +1,7 @@
 package com.oficina.cadastro.controller;
 
 import com.oficina.cadastro.model.VerificationCode;
-import com.oficina.cadastro.service.SendGridEmailService;
+import com.oficina.cadastro.service.BrevoEmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class VerificationController {
     private static final Logger logger = LoggerFactory.getLogger(VerificationController.class);
 
     @Autowired
-    private SendGridEmailService emailService;
+    private BrevoEmailService emailService;
 
     @PostMapping("/send-code")
     public ResponseEntity<Map<String, Object>> sendVerificationCode(@RequestBody Map<String, String> request) {

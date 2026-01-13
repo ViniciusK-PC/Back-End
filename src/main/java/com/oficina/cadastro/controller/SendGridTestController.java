@@ -1,6 +1,6 @@
 package com.oficina.cadastro.controller;
 
-import com.oficina.cadastro.service.SendGridEmailService;
+import com.oficina.cadastro.service.BrevoEmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class SendGridTestController {
     private static final Logger logger = LoggerFactory.getLogger(SendGridTestController.class);
 
     @Autowired
-    private SendGridEmailService emailService;
+    private BrevoEmailService emailService;
 
     @PostMapping("/sendgrid-test")
     public ResponseEntity<Map<String, Object>> testSendGridEmail(@RequestBody Map<String, String> request) {
@@ -31,7 +31,7 @@ public class SendGridTestController {
         }
 
         try {
-            logger.info("🧪 Testando SendGrid com email: {}", email);
+            logger.info("🧪 Testando envio de email (Brevo SMTP) com email: {}", email);
             
             // Criar código de teste
             String testCode = emailService.generateCode();
@@ -56,7 +56,7 @@ public class SendGridTestController {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            logger.error("💥 Erro ao testar SendGrid: {}", e.getMessage(), e);
+            logger.error("💥 Erro ao testar envio de email (Brevo SMTP): {}", e.getMessage(), e);
             response.put("success", false);
             response.put("message", "Erro interno: " + e.getMessage());
             return ResponseEntity.status(500).body(response);
@@ -68,26 +68,25 @@ public class SendGridTestController {
         Map<String, Object> response = new HashMap<>();
         
         try {
-            // Verificar se a chave SendGrid está configurada
-            String apiKey = System.getProperty("sendgrid.api.key", "");
-            if (apiKey.isEmpty()) {
-                apiKey = System.getenv("SENDGRID_API_KEY");
+            String username = System.getProperty("spring.mail.username", "");
+            if (username.isEmpty()) {
+                username = System.getenv("BREVO_SMTP_USERNAME");
             }
-            
-            boolean isConfigured = apiKey != null && !apiKey.trim().isEmpty();
+
+            boolean isConfigured = username != null && !username.trim().isEmpty();
             
             response.put("success", true);
-            response.put("sendgridConfigured", isConfigured);
-            response.put("apiKeyLength", isConfigured ? apiKey.length() : 0);
-            response.put("fromEmail", "tecmau@gmail.com");
-            response.put("fromName", "Eletrotecnica Mauricio");
-            
-            logger.info("📊 Status SendGrid - Configurado: {}", isConfigured);
+            response.put("brevoSmtpConfigured", isConfigured);
+            response.put("usernameLength", isConfigured ? username.length() : 0);
+            response.put("fromEmail", System.getenv().getOrDefault("BREVO_FROM_EMAIL", "tecmau@gmail.com"));
+            response.put("fromName", System.getenv().getOrDefault("BREVO_FROM_NAME", "Eletrotecnica Mauricio"));
+
+            logger.info("📊 Status Brevo SMTP - Configurado: {}", isConfigured);
             
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            logger.error("💥 Erro ao verificar status do SendGrid: {}", e.getMessage());
+            logger.error("💥 Erro ao verificar status do Brevo SMTP: {}", e.getMessage());
             response.put("success", false);
             response.put("message", "Erro ao verificar status");
             return ResponseEntity.status(500).body(response);
