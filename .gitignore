@@ -34,3 +34,14 @@ build/
 
 ### Environment Variables ###
 .env
+.env*
+.env.*
+.env.local
+.env.development
+.env.production
+
+# Spring local/secret properties (do not commit secrets)
+src/main/resources/application-secrets.properties
+src/main/resources/application-*.secrets.properties
+src/main/resources/application-local.properties
+src/main/resources/application-*.local.properties
