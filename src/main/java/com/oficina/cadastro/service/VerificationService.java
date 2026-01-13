@@ -12,14 +12,14 @@ import java.util.Random;
 public class VerificationService {
     private final VerificationCodeRepository repo;
     private final EmailValidationService emailValidationService;
-    private final SendGridEmailService sendGridEmailService;
+    private final SmtpEmailService smtpEmailService;
 
     public VerificationService(VerificationCodeRepository repo,
                                EmailValidationService emailValidationService,
-                               SendGridEmailService sendGridEmailService) {
+                               SmtpEmailService smtpEmailService) {
         this.repo = repo;
         this.emailValidationService = emailValidationService;
-        this.sendGridEmailService = sendGridEmailService;
+        this.smtpEmailService = smtpEmailService;
     }
 
     public boolean sendCode(String email) {
@@ -38,7 +38,7 @@ public class VerificationService {
 
         String subject = "Código de Verificação";
         String body = "<p>Seu código é: <strong>" + code + "</strong></p><p>Expira em 10 minutos.</p>";
-        return sendGridEmailService.sendVerificationEmail(email, subject, body);
+        return smtpEmailService.sendHtml(email, subject, body);
     }
 
     public boolean validateCode(String email, String code) {
@@ -55,4 +55,3 @@ public class VerificationService {
                 .orElse(false);
     }
 }
-
